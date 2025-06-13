@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { History, Search, Download as DownloadIcon, Calendar, HardDrive, Filter } from 'lucide-react'
+import { History, Search, Download as DownloadIcon, Calendar, HardDrive, Filter, X, RotateCcw } from 'lucide-react'
 import type { Download } from '@/lib/db/schema'
 
 export default function HistoryPage() {
@@ -18,13 +18,19 @@ export default function HistoryPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [sortBy, setSortBy] = useState('date')
+  const [removingItems, setRemovingItems] = useState<Set<number>>(new Set())
+  const [retryingItems, setRetryingItems] = useState<Set<number>>(new Set())
 
   useEffect(() => {
     fetchDownloads()
   }, [])
-
   const filterAndSortDownloads = useCallback(() => {
-    let filtered = downloads
+    // Only show historical downloads (completed, failed, cancelled) - not active ones
+    let filtered = downloads.filter(download =>
+      download.status === 'completed' ||
+      download.status === 'failed' ||
+      download.status === 'cancelled'
+    )
 
     // Apply search filter
     if (searchTerm) {
@@ -76,13 +82,88 @@ export default function HistoryPage() {
       setIsLoading(false)
     }
   }
-
   const formatFileSize = (bytes: number | null): string => {
     if (!bytes) return 'Unknown'
     const sizes = ['B', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(1024))
     return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`
   }
+  const handleRemoveFromHistory = async (downloadId: number) => {
+    setRemovingItems(prev => new Set(prev).add(downloadId));
+
+    try {
+      const response = await fetch('/api/download', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ downloadId, action: 'remove' }),
+      });
+
+      if (response.ok) {
+        const toastModule = await import("sonner")
+        toastModule.toast.success('Download removed from history')
+        await fetchDownloads();
+      } else {
+        const toastModule = await import("sonner")
+        toastModule.toast.error('Failed to remove download from history')
+        console.error('Failed to remove download from history');
+      }
+    } catch (error) {
+      const toastModule = await import("sonner")
+      toastModule.toast.error('Failed to remove download')
+      console.error('Failed to remove download:', error);
+    } finally {
+      setRemovingItems(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(downloadId);
+        return newSet;
+      });
+    }
+  };
+  const handleRetryDownload = async (download: Download) => {
+    setRetryingItems(prev => new Set(prev).add(download.id))
+
+    try {
+      const response = await fetch('/api/download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: download.url,
+          videoId: download.videoId,
+          title: download.title,
+          quality: download.quality,
+          audioOnly: download.format === 'mp3',
+          outputPath: download.filePath,
+          thumbnailUrl: download.thumbnailUrl,
+          duration: download.duration,
+        }),
+      });
+
+      if (response.ok) {
+        // Show success message
+        const toastModule = await import("sonner")
+        toastModule.toast.success('Download restarted successfully')
+        await fetchDownloads();
+      } else {
+        const toastModule = await import("sonner")
+        toastModule.toast.error('Failed to restart download')
+        console.error('Failed to restart download');
+      }
+    } catch (error) {
+      const toastModule = await import("sonner")
+      toastModule.toast.error('Failed to restart download')
+      console.error('Failed to restart download:', error);
+    } finally {
+      setRetryingItems(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(download.id)
+        return newSet
+      })
+    }
+  };
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed': return 'bg-green-100 text-green-800 border-green-200'
@@ -93,7 +174,6 @@ export default function HistoryPage() {
       default: return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
-
   const getStatusText = (status: string) => {
     switch (status) {
       case 'completed': return 'Completed'
@@ -104,11 +184,6 @@ export default function HistoryPage() {
       case 'pending': return 'Pending'
       default: return status
     }
-  }
-
-  const handleRedownload = async (download: Download) => {
-    // TODO: Implement redownload functionality
-    console.log('Redownload:', download)
   }
 
   if (isLoading) {
@@ -128,7 +203,7 @@ export default function HistoryPage() {
     <div className="min-h-screen bg-background">
       <Navigation />
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto px-2 sm:px-4">
           <div className="flex items-center gap-4 mb-6">
             <History className="h-6 w-6" />
             <h1 className="text-2xl font-bold">Download History</h1>
@@ -143,7 +218,7 @@ export default function HistoryPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Search</label>
                   <div className="relative">
@@ -162,13 +237,11 @@ export default function HistoryPage() {
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
                     <SelectTrigger>
                       <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
+                    </SelectTrigger>                    <SelectContent>
                       <SelectItem value="all">All Status</SelectItem>
                       <SelectItem value="completed">Completed</SelectItem>
                       <SelectItem value="failed">Failed</SelectItem>
-                      <SelectItem value="downloading">Downloading</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -215,10 +288,10 @@ export default function HistoryPage() {
             <div className="space-y-4">
               {filteredDownloads.map((download) => (
                 <Card key={download.id}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start gap-4">                          {download.thumbnailUrl && (
+                  <CardContent className="p-6">                      <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-col md:flex-row md:items-start gap-4">
+                        {download.thumbnailUrl && (
                           <div className="flex-shrink-0">
                             <Image
                               src={download.thumbnailUrl}
@@ -226,73 +299,95 @@ export default function HistoryPage() {
                               width={96}
                               height={64}
                               className="object-cover rounded-lg"
+                              unoptimized
                             />
                           </div>
                         )}
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-lg mb-2 line-clamp-2">
-                              {download.title}
-                            </h3>
-                            <div className="flex items-center gap-3 mb-3 flex-wrap">
-                              <Badge className={getStatusColor(download.status)}>
-                                {getStatusText(download.status)}
-                              </Badge>
-                              {download.quality && (
-                                <Badge variant="outline">{download.quality}</Badge>
-                              )}
-                              {download.format && (
-                                <Badge variant="outline">{download.format.toUpperCase()}</Badge>
-                              )}
-                              {download.fileSize && (
-                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                  <HardDrive className="h-3 w-3" />
-                                  {formatFileSize(download.fileSize)}
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              {download.downloadedAt && (
-                                <div className="flex items-center gap-1">
-                                  <Calendar className="h-3 w-3" />
-                                  {new Date(download.downloadedAt).toLocaleDateString()} {new Date(download.downloadedAt).toLocaleTimeString()}
-                                </div>
-                              )}
-                              {download.duration && (
-                                <div>
-                                  Duration: {Math.floor(download.duration / 60)}:{(download.duration % 60).toString().padStart(2, '0')}
-                                </div>
-                              )}
-                            </div>
-                            {download.errorMessage && (
-                              <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700">
-                                Error: {download.errorMessage}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                            {download.title}
+                          </h3>
+                          <div className="flex items-center gap-3 mb-3 flex-wrap">
+                            <Badge className={getStatusColor(download.status)}>
+                              {getStatusText(download.status)}
+                            </Badge>
+                            {download.quality && (
+                              <Badge variant="outline">{download.quality}</Badge>
+                            )}
+                            {download.format && (
+                              <Badge variant="outline">{download.format.toUpperCase()}</Badge>
+                            )}
+                            {download.fileSize && (
+                              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                <HardDrive className="h-3 w-3" />
+                                {formatFileSize(download.fileSize)}
                               </div>
                             )}
                           </div>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
+                            {download.downloadedAt && (
+                              <div className="flex items-center gap-1">
+                                <Calendar className="h-3 w-3" />
+                                <span className="hidden sm:inline">{new Date(download.downloadedAt).toLocaleDateString()} {new Date(download.downloadedAt).toLocaleTimeString()}</span>
+                                <span className="sm:hidden">{new Date(download.downloadedAt).toLocaleDateString()}</span>
+                              </div>
+                            )}
+                            {download.duration && (
+                              <div>
+                                Duration: {Math.floor(download.duration / 60)}:{(download.duration % 60).toString().padStart(2, '0')}
+                              </div>
+                            )}
+                          </div>
+                          {download.errorMessage && (
+                            <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+                              Error: {download.errorMessage}
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 ml-4">
-                        {download.status === 'completed' && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleRedownload(download)}
-                          >
-                            <DownloadIcon className="h-3 w-3 mr-1" />
-                            Redownload
-                          </Button>
-                        )}
-                        {download.status === 'failed' && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleRedownload(download)}
-                          >
-                            Retry
-                          </Button>
-                        )}
-                      </div>
                     </div>
+
+                    {/* Action buttons - responsive layout */}
+                    <div className="flex flex-col sm:flex-row items-center gap-2 ml-4 flex-shrink-0">
+                      {/* Remove button */}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveFromHistory(download.id)}
+                        disabled={removingItems.has(download.id)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        title="Remove from history"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+
+                      {/* Retry/Redownload buttons */}
+                      {download.status === 'completed' && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleRetryDownload(download)}
+                          disabled={retryingItems.has(download.id)}
+                        >
+                          <DownloadIcon className="h-3 w-3 mr-1" />
+                          <span className="hidden sm:inline">Redownload</span>
+                          <span className="sm:hidden">↻</span>
+                        </Button>
+                      )}
+                      {download.status === 'failed' && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleRetryDownload(download)}
+                          disabled={retryingItems.has(download.id)}
+                        >
+                          <RotateCcw className="h-3 w-3 mr-1" />
+                          <span className="hidden sm:inline">{retryingItems.has(download.id) ? 'Retrying...' : 'Retry'}</span>
+                          <span className="sm:hidden">↻</span>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                   </CardContent>
                 </Card>
               ))}
