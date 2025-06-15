@@ -122,8 +122,8 @@ The first stable release of Nazzel - a modern, full-stack application for downlo
 
 ```bash
 # Clone repository
-git clone https://github.com/KareemAdelAwwad/youtube-downloader.git
-cd youtube-downloader
+git clone https://github.com/KareemAdelAwwad/nazzel.git
+cd nazzel
 
 # Install dependencies
 npm install

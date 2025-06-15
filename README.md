@@ -74,8 +74,8 @@ sudo apt install ffmpeg
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/KareemAdelAwwad/youtube-downloader.git
-   cd youtube-downloader
+   git clone https://github.com/KareemAdelAwwad/nazzel.git
+   cd nazzel
    ```
 
 2. **Install dependencies**
@@ -109,7 +109,7 @@ sudo apt install ffmpeg
 ## 📁 Project Structure
 
 ```
-youtube-downloader/
+nazzel/
 ├── src/
 │   ├── app/                    # Next.js App Router pages
 │   │   ├── api/               # API routes
@@ -183,7 +183,7 @@ Before running this application, ensure you have the following installed:
 
    ```bash
    git clone <repository-url>
-   cd youtube-downloader
+   cd nazzel
    ```
 
 2. **Install dependencies**
@@ -234,7 +234,7 @@ Before running this application, ensure you have the following installed:
 ## Project Structure
 
 ```
-youtube-downloader/
+nazzel/
 ├── src/
 │   ├── app/                    # Next.js App Router pages
 │   │   ├── api/               # API routes
@@ -307,7 +307,7 @@ Create a `.env.local` file in the root directory:
 
 ```env
 NODE_ENV=development
-DATABASE_URL=file:./data/youtube-downloader.db
+DATABASE_URL=file:./data/nazzel.db
 ```
 
 ### Custom Download Directory
@@ -350,7 +350,7 @@ ffmpeg -version
 
 ```bash
 # Reset database
-rm -rf data/youtube-downloader.db
+rm -rf data/nazzel.db
 npm run db:migrate
 ```
 
@@ -402,7 +402,7 @@ This tool is for educational and personal use only. Please respect YouTube's Ter
 If you encounter any issues or have questions:
 
 1. **Check the [Troubleshooting](#-troubleshooting) section**
-2. **Search existing [GitHub Issues](https://github.com/KareemAdelAwwad/youtube-downloader/issues)**
+2. **Search existing [GitHub Issues](https://github.com/KareemAdelAwwad/nazzel/issues)**
 3. **Create a new issue** if your problem isn't covered
 
 ---

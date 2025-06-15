@@ -2,7 +2,7 @@
   "name": "nazzel",
   "version": "1.0.0",
   "private": false,
-  "description": "A modern, full-stack Nazzel built with Next.js 15, featuring real-time progress tracking and a beautiful UI.",
+  "description": "A modern, full-stack YouTube Downloader built with Next.js 15, featuring real-time progress tracking and a beautiful UI.",
   "keywords": [
     "youtube",
     "downloader",
@@ -15,13 +15,13 @@
   ],
   "author": "Kareem Adel <contact@kareem-adel.com>",
   "license": "MIT",
-  "homepage": "https://github.com/KareemAdelAwwad/youtube-downloader",
+  "homepage": "https://github.com/KareemAdelAwwad/nazzel",
   "repository": {
     "type": "git",
-    "url": "https://github.com/KareemAdelAwwad/youtube-downloader.git"
+    "url": "https://github.com/KareemAdelAwwad/nazzel.git"
   },
   "bugs": {
-    "url": "https://github.com/KareemAdelAwwad/youtube-downloader/issues"
+    "url": "https://github.com/KareemAdelAwwad/nazzel/issues"
   },
   "scripts": {
     "dev": "next dev --turbopack",

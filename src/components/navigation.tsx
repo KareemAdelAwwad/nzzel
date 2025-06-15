@@ -46,7 +46,7 @@ export function Navigation() {
         </nav>
         <div className="ml-auto flex items-center space-x-4">
           <Link
-            href="https://github.com/KareemAdelAwwad/youtube-downloader"
+            href="https://github.com/KareemAdelAwwad/nazzel"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center h-9 w-9 rounded-lg bg-transparent hover:bg-muted/80 transition-colors"

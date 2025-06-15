@@ -11,7 +11,7 @@ if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-const sqlite = new Database(path.join(dataDir, 'youtube-downloader.db'));
+const sqlite = new Database(path.join(dataDir, 'nazzel.db'));
 export const db = drizzle(sqlite, { schema });
 
 // Run migrations on startup
