@@ -74,7 +74,7 @@ export function UrlInput() {
   }
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <Card className="relative overflow-hidden bg-gradient-to-br from-card/80 via-card/60 to-card/40 backdrop-blur-xl border-border/30 transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:via-white/5 before:to-transparent before:pointer-events-none">
+      <Card className="relative overflow-hidden bg-gradient-to-br from-card/80 via-card/60 to-card/40 backdrop-blur-xl border-border/30 transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:via-white/5 before:to-transparent before:pointer-events-none before:rounded-xl">
         {/* Enhanced decorative background */}
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10"></div>
         <div className="absolute -inset-20 bg-gradient-to-r from-primary/30 via-primary/10 to-primary/30 opacity-20 blur-3xl animate-pulse"></div>

@@ -254,7 +254,7 @@ export default function DownloadsPage() {
           {activeDownloads.length > 0 ? (
             <div className="grid gap-6">
               {activeDownloads.map((download) => (
-                <Card key={download.id} className="overflow-hidden border-border/30 bg-gradient-to-br from-card/80 via-card/60 to-card/40 backdrop-blur-xl hover:from-card/90 hover:via-card/70 hover:to-card/50 transition-all duration-500 group relative before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:via-white/5 before:to-transparent before:pointer-events-none">
+                <Card key={download.id} className="overflow-hidden border-border/30 bg-gradient-to-br from-card/80 via-card/60 to-card/40 backdrop-blur-xl hover:from-card/90 hover:via-card/70 hover:to-card/50 transition-all duration-500 group relative before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:via-white/5 before:to-transparent before:pointer-events-none before:rounded-xl">
                   <CardContent className="p-0">
                     <div className="relative">
                       {/* Status indicator bar */}
@@ -425,7 +425,7 @@ export default function DownloadsPage() {
                 </Card>
               ))}
             </div>) : (
-            <Card className="border-border/30 bg-gradient-to-br from-card/80 via-card/60 to-card/40 backdrop-blur-xl relative before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:via-white/5 before:to-transparent before:pointer-events-none">
+            <Card className="border-border/30 bg-gradient-to-br from-card/80 via-card/60 to-card/40 backdrop-blur-xl relative before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:via-white/5 before:to-transparent before:pointer-events-none before:rounded-xl">
               <CardContent className="text-center py-20">
                 <div className="space-y-8">
                   <div className="relative mx-auto w-32 h-32">
