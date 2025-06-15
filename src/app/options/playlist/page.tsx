@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Navigation } from '@/components/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -205,24 +204,21 @@ export default function PlaylistOptionsPage() {
       setIsDownloading(false)
     }
   }
-
   if (!playlistData) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
-        <main className="container mx-auto px-4 py-8">
+      <div className="min-h-full bg-background">
+        <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center h-64">
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
-        </main>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <main className="container mx-auto px-4 py-8">
+    <div className="min-h-full bg-background">
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-4 mb-6">
             <Button variant="outline" onClick={() => router.back()}>
@@ -460,13 +456,12 @@ export default function PlaylistOptionsPage() {
                       </div>                        </div>
                     </div>
                   </div>
-                ))}
-                </div>
+                ))}                </div>
               </CardContent>
             </Card>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   )
 }

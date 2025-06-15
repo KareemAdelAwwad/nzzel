@@ -4,9 +4,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Loader2, Download } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Loader2, Link, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function UrlInput() {
@@ -62,60 +61,82 @@ export function UrlInput() {
     }
   }
 
+  const handlePaste = async () => {
+    try {
+      const text = await navigator.clipboard.readText()
+      if (text) {
+        setUrl(text)
+        toast.success('URL pasted from clipboard')
+      }
+    } catch {
+      toast.error('Failed to paste from clipboard')
+    }
+  }
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Download className="h-5 w-5" />
-          Enter YouTube URL
-        </CardTitle>
-        <CardDescription>
-          Paste a YouTube video or playlist URL to get started
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="url">YouTube URL</Label>
-            <Input
-              id="url"
-              type="url"
-              placeholder="https://www.youtube.com/watch?v=..."
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              disabled={isLoading}
-              className="w-full"
-            />
-          </div>
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading || !url.trim()}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Extracting Information...
-              </>
-            ) : (
-              <>
-                <Download className="mr-2 h-4 w-4" />
-                Extract Video Information
-              </>
-            )}
-          </Button>
-        </form>
+    <div className="w-full max-w-4xl mx-auto">
+      <Card className="relative overflow-hidden bg-gradient-to-br from-card/80 via-card/60 to-card/40 backdrop-blur-xl border-border/30 transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/10 before:via-white/5 before:to-transparent before:pointer-events-none">
+        {/* Enhanced decorative background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/10"></div>
+        <div className="absolute -inset-20 bg-gradient-to-r from-primary/30 via-primary/10 to-primary/30 opacity-20 blur-3xl animate-pulse"></div>
+        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:30px_30px]"></div>
 
-        <div className="mt-4 text-sm text-muted-foreground">
-          <p className="font-medium mb-2">Supported URLs:</p>
-          <ul className="space-y-1 text-xs">
-            <li>• Single videos: https://www.youtube.com/watch?v=...</li>
-            <li>• Short URLs: https://youtu.be/...</li>
-            <li>• Playlists: https://www.youtube.com/playlist?list=...</li>
-            <li>• Channel URLs with playlists</li>
-          </ul>
-        </div>
-      </CardContent>
-    </Card>
+        <CardContent className="relative p-8 space-y-8">
+          {/* Enhanced Header */}
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl font-bold bg-gradient-to-r via-primary to-foreground/80 bg-clip-text text-transparent">
+              Extract Video Information
+            </h2>
+            <p className="text-muted-foreground text- leading-relaxed mx-auto">
+              Enter any YouTube URL to get started with your download
+            </p>
+          </div>
+
+          {/* Enhanced Input Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="relative group">
+              <div className="relative">
+                <Input
+                  type="url"
+                  placeholder="https://www.youtube.com/watch?v=... or youtu.be/..."
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  disabled={isLoading}
+                  className="pl-12 pr-24 h-12 text-lg bg-background/60 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all duration-300 backdrop-blur-sm"
+                />
+                <Link className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handlePaste}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 px-4 text-sm hover:bg-primary/10 rounded-lg font-medium transition-all duration-200"
+                >
+                  Paste
+                </Button>
+              </div>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 text-lg bg-primary/80 transition-all duration-300 group relative overflow-hidden"
+              disabled={isLoading || !url.trim()}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-3 h-5 w-5 animate-spin" />
+                  Extracting Information...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-3 h-5 w-5 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300" />
+                  Extract Video Information
+                </>
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

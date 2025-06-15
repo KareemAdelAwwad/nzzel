@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Navigation } from '@/components/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -121,16 +120,14 @@ export default function VideoOptionsPage() {
       setIsDownloading(false)
     }
   }
-
   if (!videoData) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
-        <main className="container mx-auto px-4 py-8">
+      <div className="min-h-full bg-background">
+        <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center h-64">
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
-        </main>
+        </div>
       </div>
     )
   }
@@ -138,9 +135,8 @@ export default function VideoOptionsPage() {
   const qualityOptions = getQualityOptions()
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <main className="container mx-auto px-4 py-8">
+    <div className="min-h-full bg-background">
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-4 mb-6">
             <Button variant="outline" onClick={() => router.back()}>
@@ -320,14 +316,13 @@ export default function VideoOptionsPage() {
                           <p className="text-sm text-muted-foreground">{format.tbr} kbps</p>
                         )}
                       </div>
-                    </div>
-                  ))}
+                    </div>                  ))}
                 </div>
               </CardContent>
             </Card>
           )}
         </div>
-      </main>
+      </div>
     </div>
   )
 }
