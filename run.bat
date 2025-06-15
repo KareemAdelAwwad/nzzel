@@ -1,7 +1,7 @@
 @echo off
 color 0A
 echo ========================================
-echo    YouTube Downloader - Startup Script
+echo    Nazzel - Startup Script
 echo ========================================
 echo.
 

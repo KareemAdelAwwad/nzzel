@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# YouTube Downloader Setup Script
-echo "🎥 Setting up YouTube Downloader..."
+# Nazzel Setup Script
+echo "🎥 Setting up Nazzel..."
 
 # Check Node.js
 if ! command -v node &> /dev/null; then

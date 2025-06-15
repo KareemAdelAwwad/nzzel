@@ -1,8 +1,8 @@
 {
-  "name": "youtube-downloader",
+  "name": "nazzel",
   "version": "1.0.0",
   "private": false,
-  "description": "A modern, full-stack YouTube downloader built with Next.js 15, featuring real-time progress tracking and a beautiful UI.",
+  "description": "A modern, full-stack Nazzel built with Next.js 15, featuring real-time progress tracking and a beautiful UI.",
   "keywords": [
     "youtube",
     "downloader",

@@ -249,7 +249,8 @@ export default function DownloadsPage() {
                 </div>
               </div>
             )}
-          </div>          {/* Enhanced Downloads Grid */}
+          </div>
+          {/* Enhanced Downloads Grid */}
           {activeDownloads.length > 0 ? (
             <div className="grid gap-6">
               {activeDownloads.map((download) => (

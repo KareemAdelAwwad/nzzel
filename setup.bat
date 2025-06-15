@@ -1,5 +1,5 @@
 @echo off
-echo Setting up YouTube Downloader...
+echo Setting up Nazzel...
 
 REM Check Node.js
 node --version >nul 2>&1

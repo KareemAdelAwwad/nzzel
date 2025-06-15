@@ -1,6 +1,6 @@
-# YouTube Downloader
+# Nazzel
 
-A modern, full-stack YouTube downloader built with Next.js 15, featuring real-time progress tracking and a beautiful UI.
+A modern, full-stack Nazzel built with Next.js 15, featuring real-time progress tracking and a beautiful UI.
 
 ## 🚀 Features
 
@@ -31,7 +31,7 @@ Before running this application, ensure you have:
 
 - **Node.js** (v18 or higher)
 - **npm** or **yarn** package manager
-- **yt-dlp** (YouTube downloader)
+- **yt-dlp** (Nazzel)
 - **ffmpeg** (for video processing)
 
 ### Installing Dependencies
@@ -151,7 +151,7 @@ youtube-downloader/
 Before running this application, ensure you have the following installed:
 
 1. **Node.js** (v18 or higher)
-2. **yt-dlp** - YouTube downloader
+2. **yt-dlp** - Nazzel
 
    ```bash
    # Windows (using winget)
@@ -391,7 +391,7 @@ This tool is for educational and personal use only. Please respect YouTube's Ter
 
 ## 🙏 Acknowledgments
 
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - Powerful YouTube downloader
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - Powerful Nazzel
 - [Next.js](https://nextjs.org/) - React framework for production
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 - [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components

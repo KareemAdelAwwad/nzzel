@@ -19,9 +19,9 @@ export function Navigation() {
       <div className="container flex h-16 items-center px-4">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2 group">
-            <Image src="/logo.png" alt="YouTube Downloader Icon" width={46} height={46} />
+            <Image src="/logo.png" alt="Nazzel Icon" width={46} height={46} />
             <span className="font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              YouTube Downloader
+              Nazzel
             </span>
           </Link>
         </div>
