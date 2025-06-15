@@ -78,7 +78,10 @@ export default function HistoryPage() {
         setDownloads(data)
       }
     } catch (error) {
-      console.error('Failed to fetch downloads:', error)
+      // Handle fetch error silently or log in development
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to fetch downloads:', error)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -114,11 +117,15 @@ export default function HistoryPage() {
         await fetchDownloads()
       } else {
         toast.error('Failed to remove download')
-        console.error('Failed to remove download')
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to remove download')
+        }
       }
     } catch (error) {
       toast.error('Failed to remove download')
-      console.error('Failed to remove download:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to remove download:', error)
+      }
     } finally {
       setRemovingItems(prev => {
         const newSet = new Set(prev)
@@ -154,11 +161,15 @@ export default function HistoryPage() {
         await fetchDownloads()
       } else {
         toast.error('Failed to restart download')
-        console.error('Failed to restart download')
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to restart download')
+        }
       }
     } catch (error) {
       toast.error('Failed to restart download')
-      console.error('Failed to restart download:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to restart download:', error)
+      }
     } finally {
       setRetryingItems(prev => {
         const newSet = new Set(prev)
@@ -201,27 +212,27 @@ export default function HistoryPage() {
   }
 
   if (isLoading) {
-    return (      <div className="min-h-full bg-gradient-to-br from-background via-background to-primary/5 relative overflow-hidden">
-        {/* Animated background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
-          <div className="absolute h-full w-full bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
-        </div>
+    return (<div className="min-h-full bg-gradient-to-br from-background via-background to-primary/5 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
+        <div className="absolute h-full w-full bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
+      </div>
 
-        <div className="relative container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="flex flex-col items-center gap-6 p-8 rounded-2xl backdrop-blur-sm bg-card/50 border border-border/30">
-              <div className="relative">
-                <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-                <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-primary/40 rounded-full animate-spin animation-delay-150"></div>
-              </div>
-              <div className="text-center space-y-2">
-                <h3 className="text-xl font-semibold">Loading History</h3>                <p className="text-muted-foreground">Fetching your download history...</p>
-              </div>
+      <div className="relative container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="flex flex-col items-center gap-6 p-8 rounded-2xl backdrop-blur-sm bg-card/50 border border-border/30">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+              <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-primary/40 rounded-full animate-spin animation-delay-150"></div>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-semibold">Loading History</h3>                <p className="text-muted-foreground">Fetching your download history...</p>
             </div>
           </div>
         </div>
       </div>
+    </div>
     )
   }
 

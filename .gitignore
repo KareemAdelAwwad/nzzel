@@ -49,6 +49,25 @@ next-env.d.ts
 /cache
 /downloads
 
+# IDE and editor files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
 # IDE
 .vscode/settings.json
 .idea/

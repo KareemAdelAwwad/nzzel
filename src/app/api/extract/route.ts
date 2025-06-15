@@ -38,7 +38,9 @@ export async function POST(request: NextRequest) {
       });
     }
   } catch (error) {
-    console.error('Error extracting video info:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error extracting video info:', error);
+    }
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to extract video information' },
       { status: 500 }

@@ -2,52 +2,131 @@
 
 A modern, full-stack YouTube downloader built with Next.js 15, featuring real-time progress tracking and a beautiful UI.
 
-## Recent Fixes
+## 🚀 Features
 
-✅ **Fixed Theme System**
+- **Video & Playlist Support**: Download individual videos or entire playlists
+- **Multiple Formats**: Support for MP4 (video) and MP3 (audio) formats
+- **Quality Selection**: Choose from 144p to 4K quality options
+- **Real-time Progress**: Live download progress with speed and ETA tracking
+- **Download Management**: Pause, cancel, and restart downloads
+- **History Tracking**: Complete download history with search and filtering
+- **Beautiful UI**: Modern, responsive design with dark/light theme support
+- **Offline Ready**: Fully local application, no external dependencies
+- **Smart Queue**: Efficient download queue management
 
-- Enhanced theme provider with proper hydration handling
-- Theme persistence now works correctly across page reloads
-- Fixed theme toggle component functionality
+## 🛠️ Tech Stack
 
-✅ **Fixed Format Display Issues**
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript for type safety
+- **Styling**: Tailwind CSS 4 with shadcn/ui components
+- **Typography**: Manrope font family from Google Fonts
+- **Database**: Drizzle ORM with SQLite for local storage
+- **Real-time**: Socket.IO for live progress updates
+- **Downloader**: yt-dlp integration with ffmpeg processing
+- **State Management**: React Server Components and Client Components
 
-- Format notes now show meaningful information instead of "Unknown"
-- Added fallback logic for format descriptions
-- File sizes are properly displayed for all quality options
+## 📋 Prerequisites
 
-✅ **Enhanced Download Management**
+Before running this application, ensure you have:
 
-- Added download pause and cancel functionality
-- Fixed download progress tracking (no longer stuck at 0%)
-- Improved progress parsing from yt-dlp output
-- Added proper download ID management
+- **Node.js** (v18 or higher)
+- **npm** or **yarn** package manager
+- **yt-dlp** (YouTube downloader)
+- **ffmpeg** (for video processing)
 
-✅ **UI/UX Improvements**
+### Installing Dependencies
 
-- Video thumbnails are displayed in playlist options
-- File sizes are shown for each quality option
-- Enhanced download status indicators
-- Better error handling and user feedback
+#### Windows
 
-✅ **Build Issues Resolved**
+```powershell
+# Install yt-dlp
+pip install yt-dlp
 
-- All TypeScript compilation errors fixed
-- Proper module imports and exports
-- Lint warnings addressed
-- Database schema updated with cancelled status
+# Install ffmpeg (using Chocolatey)
+choco install ffmpeg
 
-## Available Scripts
+# Or download from https://ffmpeg.org/download.html
+```
 
-- `npm run dev` - Start development server (also available as `npm run run`)
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run db:generate` - Generate database migrations
-- `npm run db:migrate` - Apply database migrations
-- `npm run db:studio` - Open Drizzle Studio
+#### macOS
 
-## Features
+```bash
+# Install yt-dlp
+pip install yt-dlp
+
+# Install ffmpeg (using Homebrew)
+brew install ffmpeg
+```
+
+#### Linux (Ubuntu/Debian)
+
+```bash
+# Install yt-dlp
+pip install yt-dlp
+
+# Install ffmpeg
+sudo apt update
+sudo apt install ffmpeg
+```
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/KareemAdelAwwad/youtube-downloader.git
+   cd youtube-downloader
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. **Initialize the database**
+
+   ```bash
+   npm run db:generate
+   npm run db:migrate
+   ```
+
+5. **Start the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 📁 Project Structure
+
+```
+youtube-downloader/
+├── src/
+│   ├── app/                    # Next.js App Router pages
+│   │   ├── api/               # API routes
+│   │   ├── downloads/         # Downloads management page
+│   │   ├── history/           # Download history page
+│   │   └── options/           # Video/playlist options pages
+│   ├── components/            # React components
+│   │   ├── ui/               # shadcn/ui components
+│   │   └── ...               # Custom components
+│   └── lib/                   # Utilities and services
+│       ├── db/               # Database schema and connection
+│       ├── services/         # Business logic services
+│       └── types/            # TypeScript type definitions
+├── data/                      # SQLite database storage
+├── drizzle/                   # Database migrations
+└── public/                    # Static assets
+```
 
 - 🎥 **Video & Playlist Downloads** - Download individual videos or entire playlists
 - 🎵 **Audio Extraction** - Extract audio-only tracks as MP3
@@ -177,85 +256,157 @@ youtube-downloader/
 
 - `POST /api/extract` - Extract video/playlist information
 - `POST /api/download` - Start a download
-- `GET /api/download` - Get download history
 
-## Database Schema
+## 📖 Usage Guide
 
-The application uses SQLite with three main tables:
+### 🎥 Video Downloads
 
-- `downloads` - Individual download records
-- `playlists` - Playlist metadata
-- `playlist_videos` - Relationship between playlists and videos
+1. **Enter URL**: Paste a YouTube video URL in the input field
+2. **Select Quality**: Choose from available quality options (144p to 4K)
+3. **Choose Format**: Select MP4 for video or MP3 for audio-only
+4. **Start Download**: Click the download button and monitor progress
 
-## Configuration
+### 📋 Playlist Downloads
+
+1. **Enter Playlist URL**: Paste a YouTube playlist URL
+2. **Select Videos**: Choose which videos to download from the playlist
+3. **Bulk Settings**: Apply the same quality/format settings to all selected videos
+4. **Monitor Progress**: Track individual progress for each video
+
+### 📊 Download Management
+
+- **Real-time Progress**: See download speed, progress percentage, and ETA
+- **Pause/Resume**: Control your downloads (pause/resume functionality)
+- **Cancel Downloads**: Stop downloads at any time
+- **Download Queue**: Manage multiple simultaneous downloads
+
+### 📚 History & Re-downloads
+
+- **Complete History**: View all your previous downloads
+- **Search & Filter**: Find specific downloads quickly
+- **One-click Re-download**: Easily re-download any previous video
+- **Storage Management**: Clear history or remove specific entries
+
+## 🔧 Available Scripts
+
+| Command               | Description                              |
+| --------------------- | ---------------------------------------- |
+| `npm run dev`         | Start development server with hot reload |
+| `npm run build`       | Build optimized production version       |
+| `npm run start`       | Start production server                  |
+| `npm run lint`        | Run ESLint code quality checks           |
+| `npm run db:generate` | Generate new database migrations         |
+| `npm run db:migrate`  | Apply pending database migrations        |
+| `npm run db:studio`   | Open Drizzle Studio (database GUI)       |
+
+## 🔧 Configuration
 
 ### Environment Variables
 
-Create a `.env.local` file for custom configurations:
+Create a `.env.local` file in the root directory:
 
 ```env
-# Optional: Custom download directory
-DEFAULT_DOWNLOAD_PATH=/path/to/downloads
-
-# Optional: Database location
-DATABASE_URL=./data/youtube-downloader.db
+NODE_ENV=development
+DATABASE_URL=file:./data/youtube-downloader.db
 ```
 
-## Development
+### Custom Download Directory
 
-### Database Management
+By default, downloads are saved to your system's Downloads folder. You can customize this in the application settings.
+
+## 🏗️ Architecture
+
+### Backend Services
+
+- **YT-DLP Service**: Handles video extraction and downloading
+- **WebSocket Service**: Provides real-time progress updates
+- **Database Service**: Manages download history and metadata
+
+### Frontend Components
+
+- **Server Components**: For static content and SEO optimization
+- **Client Components**: For interactive features and real-time updates
+- **API Routes**: RESTful endpoints for backend communication
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**yt-dlp not found**
 
 ```bash
-# Generate new migration
-npm run db:generate
+# Ensure yt-dlp is installed and in PATH
+yt-dlp --version
+```
 
-# Apply migrations
+**ffmpeg not found**
+
+```bash
+# Ensure ffmpeg is installed and in PATH
+ffmpeg -version
+```
+
+**Database migration errors**
+
+```bash
+# Reset database
+rm -rf data/youtube-downloader.db
 npm run db:migrate
-
-# Open database studio
-npm run db:studio
 ```
 
-### Building for Production
+**Port already in use**
 
 ```bash
-npm run build
-npm start
+# Kill process using port 3000
+npx kill-port 3000
 ```
 
-## Troubleshooting
+## 🤝 Contributing
 
-### yt-dlp Issues
+We welcome contributions! Here's how to get started:
 
-- Ensure yt-dlp is installed and accessible in PATH
-- Update yt-dlp regularly: `yt-dlp --update` or `pip install --upgrade yt-dlp`
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/your-feature`
+3. **Make your changes** and add tests if applicable
+4. **Run the test suite**: `npm test`
+5. **Commit your changes**: `git commit -m 'Add some feature'`
+6. **Push to the branch**: `git push origin feature/your-feature`
+7. **Submit a pull request**
 
-### ffmpeg Issues
+### Development Guidelines
 
-- Verify ffmpeg installation: `ffmpeg -version`
-- Ensure ffmpeg is in your system PATH
+- Follow the existing code style and conventions
+- Add TypeScript types for all new code
+- Test your changes thoroughly
+- Update documentation as needed
+- Follow the commit message conventions
 
-### Download Failures
+## 📄 License
 
-- Check if the video is available and not geo-restricted
-- Verify the YouTube URL format is correct
-- Check the error message in the failed downloads section
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contributing
+## ⚠️ Legal Notice
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+This tool is for educational and personal use only. Please respect YouTube's Terms of Service and copyright laws in your jurisdiction. The developers are not responsible for any misuse of this software.
 
-## License
+## 🙏 Acknowledgments
 
-This project is for educational purposes only. Please respect YouTube's Terms of Service and copyright laws when downloading content.
-
-## Acknowledgments
-
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - The powerful YouTube downloader
-- [Next.js](https://nextjs.org/) - The React framework
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - Powerful YouTube downloader
+- [Next.js](https://nextjs.org/) - React framework for production
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 - [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
-- [Drizzle ORM](https://drizzle.team/) - Type-safe database toolkit
+- [Drizzle ORM](https://orm.drizzle.team/) - TypeScript ORM
+
+## 📞 Support
+
+If you encounter any issues or have questions:
+
+1. **Check the [Troubleshooting](#-troubleshooting) section**
+2. **Search existing [GitHub Issues](https://github.com/KareemAdelAwwad/youtube-downloader/issues)**
+3. **Create a new issue** if your problem isn't covered
+
+---
+
+<div align="center">
+  <strong>⭐ Star this repository if you find it helpful!</strong>
+</div>

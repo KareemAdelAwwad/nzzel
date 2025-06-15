@@ -17,7 +17,9 @@ export const db = drizzle(sqlite, { schema });
 // Run migrations on startup
 try {
   migrate(db, { migrationsFolder: 'drizzle' });
-  console.log('Database migrated successfully');
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Database migrated successfully');
+  }
 } catch (error) {
   console.error('Migration failed:', error);
 }

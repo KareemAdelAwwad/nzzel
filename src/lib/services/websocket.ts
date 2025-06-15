@@ -1,6 +1,7 @@
 import { Server as SocketIOServer } from 'socket.io';
 import { Server as HTTPServer } from 'http';
-import { ytDlpService, DownloadProgress } from './yt-dlp';
+import { ytDlpService } from './yt-dlp';
+import { DownloadProgress } from '../types/yt-dlp';
 
 interface DownloadError {
   downloadId: string;
@@ -23,7 +24,9 @@ export function initializeWebSocket(server: HTTPServer) {
   });
 
   io.on('connection', (socket) => {
-    console.log('Client connected:', socket.id);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Client connected:', socket.id);
+    }
 
     // Listen for download progress updates
     const onProgress = (data: DownloadProgress & { downloadId: string }) => {
@@ -44,7 +47,9 @@ export function initializeWebSocket(server: HTTPServer) {
     ytDlpService.on('completed', onCompleted);
 
     socket.on('disconnect', () => {
-      console.log('Client disconnected:', socket.id);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Client disconnected:', socket.id);
+      }
       // Clean up event listeners
       ytDlpService.off('progress', onProgress);
       ytDlpService.off('error', onError);

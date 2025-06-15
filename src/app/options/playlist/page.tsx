@@ -48,9 +48,14 @@ export default function PlaylistOptionsPage() {
       setSelectedVideos(allVideoIds)
 
       // Debug: Log thumbnail URLs
-      console.log('Playlist thumbnails:', parsed.data.entries.map((v: VideoInfo) => ({ id: v.id, title: v.title, thumbnail: v.thumbnail })))
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Playlist thumbnails:', parsed.data.entries.map((v: VideoInfo) => ({ id: v.id, title: v.title, thumbnail: v.thumbnail })))
+      }
     } catch (error) {
-      console.error('Failed to parse playlist data:', error)
+      toast.error('Failed to parse playlist data')
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to parse playlist data:', error)
+      }
       router.push('/')
     }
   }, [router])
@@ -135,7 +140,9 @@ export default function PlaylistOptionsPage() {
         }));
       }
     } catch (error) {
-      console.error('Failed to fetch video formats:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to fetch video formats:', error);
+      }
     } finally {
       setLoadingFormats(prev => {
         const newSet = new Set(prev);
@@ -367,7 +374,9 @@ export default function PlaylistOptionsPage() {
                               className="object-cover rounded border w-full h-full"
                               unoptimized={true}
                               onError={(e) => {
-                                console.log('Image failed to load:', thumbnailUrl);
+                                if (process.env.NODE_ENV === 'development') {
+                                  console.log('Image failed to load:', thumbnailUrl);
+                                }
                                 const target = e.target as HTMLImageElement;
                                 target.style.display = 'none';
                                 // Show fallback
@@ -377,7 +386,9 @@ export default function PlaylistOptionsPage() {
                                 }
                               }}
                               onLoad={() => {
-                                console.log('Image loaded successfully:', thumbnailUrl);
+                                if (process.env.NODE_ENV === 'development') {
+                                  console.log('Image loaded successfully:', thumbnailUrl);
+                                }
                               }}
                             />
                             <div className="absolute inset-0 hidden items-center justify-center bg-muted rounded border">

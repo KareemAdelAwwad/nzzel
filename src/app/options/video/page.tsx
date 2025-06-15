@@ -43,7 +43,10 @@ export default function VideoOptionsPage() {
       setVideoData(parsed.data)
       setOriginalUrl(url)
     } catch (error) {
-      console.error('Failed to parse video data:', error)
+      toast.error('Failed to parse video data')
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to parse video data:', error)
+      }
       router.push('/')
     }
   }, [router])
@@ -316,7 +319,7 @@ export default function VideoOptionsPage() {
                           <p className="text-sm text-muted-foreground">{format.tbr} kbps</p>
                         )}
                       </div>
-                    </div>                  ))}
+                    </div>))}
                 </div>
               </CardContent>
             </Card>

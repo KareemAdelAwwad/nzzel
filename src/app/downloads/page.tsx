@@ -32,7 +32,10 @@ export default function DownloadsPage() {
         setDownloads(data)
       }
     } catch (error) {
-      console.error('Failed to fetch downloads:', error)
+      // Handle fetch error silently or log in development
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to fetch downloads:', error)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -82,11 +85,15 @@ export default function DownloadsPage() {
         await fetchDownloads()
       } else {
         toast.error('Failed to cancel download')
-        console.error('Failed to cancel download')
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to cancel download')
+        }
       }
     } catch (error) {
       toast.error('Failed to cancel download')
-      console.error('Failed to cancel download:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to cancel download:', error)
+      }
     } finally {
       setCancellingDownloads(prev => {
         const newSet = new Set(prev)
@@ -122,11 +129,15 @@ export default function DownloadsPage() {
         await fetchDownloads()
       } else {
         toast.error('Failed to restart download')
-        console.error('Failed to restart download')
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to restart download')
+        }
       }
     } catch (error) {
       toast.error('Failed to restart download')
-      console.error('Failed to restart download:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to restart download:', error)
+      }
     } finally {
       setRetryingDownloads(prev => {
         const newSet = new Set(prev)

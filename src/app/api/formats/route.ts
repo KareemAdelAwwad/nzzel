@@ -66,7 +66,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ formats: videoFormats });
 
   } catch (error) {
-    console.error('Error getting formats:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error getting formats:', error);
+    }
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to get video formats' },
       { status: 500 }

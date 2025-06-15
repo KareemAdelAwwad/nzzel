@@ -126,7 +126,9 @@ export async function POST(request: NextRequest) {
         }, downloadId);
 
       } catch (error) {
-        console.error('Download failed:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Download failed:', error);
+        }
         // Update database with failed status
         await db.update(downloads)
           .set({

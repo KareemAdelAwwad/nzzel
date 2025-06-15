@@ -15,8 +15,7 @@ export class YtDlpService extends EventEmitter {
 
   /**
    * Get video information without downloading
-   */
-  async getVideoInfo(url: string): Promise<VideoInfo> {
+   */  async getVideoInfo(url: string): Promise<VideoInfo> {
     return new Promise((resolve, reject) => {
       const args = [
         '--dump-json',
@@ -25,22 +24,22 @@ export class YtDlpService extends EventEmitter {
         url
       ];
 
-      const process = spawn('yt-dlp', args, {
+      const childProcess = spawn('yt-dlp', args, {
         stdio: ['ignore', 'pipe', 'pipe']
       });
 
       let stdout = '';
       let stderr = '';
 
-      process.stdout?.on('data', (data) => {
+      childProcess.stdout?.on('data', (data) => {
         stdout += data.toString();
       });
 
-      process.stderr?.on('data', (data) => {
+      childProcess.stderr?.on('data', (data) => {
         stderr += data.toString();
       });
 
-      process.on('close', (code) => {
+      childProcess.on('close', (code) => {
         if (code === 0) {
           try {
             const videoInfo = JSON.parse(stdout.trim()) as VideoInfo;
@@ -61,8 +60,7 @@ export class YtDlpService extends EventEmitter {
 
   /**
    * Get playlist information
-   */
-  async getPlaylistInfo(url: string): Promise<PlaylistInfo> {
+   */  async getPlaylistInfo(url: string): Promise<PlaylistInfo> {
     return new Promise((resolve, reject) => {
       const args = [
         '--dump-json',
@@ -72,22 +70,22 @@ export class YtDlpService extends EventEmitter {
         url
       ];
 
-      const process = spawn('yt-dlp', args, {
+      const childProcess = spawn('yt-dlp', args, {
         stdio: ['ignore', 'pipe', 'pipe']
       });
 
       let stdout = '';
       let stderr = '';
 
-      process.stdout?.on('data', (data) => {
+      childProcess.stdout?.on('data', (data) => {
         stdout += data.toString();
       });
 
-      process.stderr?.on('data', (data) => {
+      childProcess.stderr?.on('data', (data) => {
         stderr += data.toString();
       });
 
-      process.on('close', (code) => {
+      childProcess.on('close', (code) => {
         if (code === 0) {
           try {
             const lines = stdout.trim().split('\n').filter(line => line.trim());
@@ -177,20 +175,20 @@ export class YtDlpService extends EventEmitter {
         args.push('--merge-output-format', 'mkv');
       }
 
-      args.push(url);
-
-      const process = spawn('yt-dlp', args, {
+      args.push(url); const childProcess = spawn('yt-dlp', args, {
         stdio: ['ignore', 'pipe', 'pipe']
       });
 
-      this.activeProcesses.set(downloadId, process);
+      this.activeProcesses.set(downloadId, childProcess);
 
-      let finalFilename = ''; process.stdout?.on('data', (data) => {
+      let finalFilename = ''; childProcess.stdout?.on('data', (data) => {
         const lines = data.toString().split('\n'); for (const line of lines) {
-          if (line.trim()) {
-            // Temporary debug: log lines that contain progress info
+          if (line.trim()) {            // Temporary debug: log lines that contain progress info
             if (line.includes('%') || line.includes('download')) {
-              console.log('YT-DLP OUTPUT:', line);
+              // Debug: Output line for debugging
+              if (process.env.NODE_ENV === 'development') {
+                console.log('YT-DLP OUTPUT:', line);
+              }
             }
 
             try {// Check for various progress patterns
@@ -256,7 +254,9 @@ export class YtDlpService extends EventEmitter {
                     }
                   }
 
-                  console.log(`PROGRESS PARSED: ${percentage}% | Speed: ${speedBps} B/s | ETA: ${etaSeconds}s | From line: ${line.trim()}`);
+                  if (process.env.NODE_ENV === 'development') {
+                    console.log(`PROGRESS PARSED: ${percentage}% | Speed: ${speedBps} B/s | ETA: ${etaSeconds}s | From line: ${line.trim()}`);
+                  }
 
                   this.emit('progress', {
                     downloadId,
@@ -283,10 +283,10 @@ export class YtDlpService extends EventEmitter {
         }
       });
 
-      process.stderr?.on('data', (data) => {
+      childProcess.stderr?.on('data', (data) => {
         const message = data.toString();
         this.emit('error', { downloadId, message });
-      }); process.on('close', (code, signal) => {
+      }); childProcess.on('close', (code, signal) => {
         this.activeProcesses.delete(downloadId);
 
         // Check if this download was cancelled
@@ -313,7 +313,7 @@ export class YtDlpService extends EventEmitter {
         }
       });
 
-      process.on('error', (error) => {
+      childProcess.on('error', (error) => {
         this.activeProcesses.delete(downloadId);
         if (this.cancelledDownloads.has(downloadId)) {
           this.cancelledDownloads.delete(downloadId);
@@ -326,10 +326,9 @@ export class YtDlpService extends EventEmitter {
     });
   }  /**
    * Pause/cancel a download
-   */
-  cancelDownload(downloadId: string): boolean {
-    const process = this.activeProcesses.get(downloadId);
-    if (process) {
+   */  cancelDownload(downloadId: string): boolean {
+    const childProcess = this.activeProcesses.get(downloadId);
+    if (childProcess) {
       // Mark as cancelled before killing the process
       this.cancelledDownloads.add(downloadId);
 
@@ -338,24 +337,26 @@ export class YtDlpService extends EventEmitter {
 
       // Try graceful termination first
       try {
-        if (process.pid) {
+        if (childProcess.pid) {
           // On Windows, use taskkill for more reliable termination
           if (os.platform() === 'win32') {
-            spawn('taskkill', ['/pid', process.pid.toString(), '/t', '/f'], {
+            spawn('taskkill', ['/pid', childProcess.pid.toString(), '/t', '/f'], {
               stdio: 'ignore'
             });
           } else {
             // On Unix-like systems, use SIGTERM first, then SIGKILL
-            process.kill('SIGTERM');
+            childProcess.kill('SIGTERM');
             setTimeout(() => {
               if (this.activeProcesses.has(downloadId)) {
-                process.kill('SIGKILL');
+                childProcess.kill('SIGKILL');
               }
             }, 5000); // Wait 5 seconds before force kill
           }
         }
       } catch (error) {
-        console.error('Error terminating process:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error terminating process:', error);
+        }
       }
 
       // Clean up immediately
@@ -390,15 +391,15 @@ export class YtDlpService extends EventEmitter {
    */
   async isAvailable(): Promise<boolean> {
     return new Promise((resolve) => {
-      const process = spawn('yt-dlp', ['--version'], {
+      const childProcess = spawn('yt-dlp', ['--version'], {
         stdio: ['ignore', 'pipe', 'pipe']
       });
 
-      process.on('close', (code) => {
+      childProcess.on('close', (code) => {
         resolve(code === 0);
       });
 
-      process.on('error', () => {
+      childProcess.on('error', () => {
         resolve(false);
       });
     });
