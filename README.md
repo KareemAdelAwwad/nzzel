@@ -1,6 +1,6 @@
 # Nazzel
 
-A modern, full-stack Nazzel built with Next.js 15, featuring real-time progress tracking and a beautiful UI.
+A modern, full-stack YouTube Downloader built with Next.js 15, featuring real-time progress tracking and a beautiful UI.
 
 ## 🚀 Features
 
