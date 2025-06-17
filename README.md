@@ -1,6 +1,6 @@
 # Nzzel
 
-A modern YouTube downloader built with Next.js 15, featuring real-time progress tracking and a clean UI.
+A modern, full-stack YouTube Downloader built with Next.js 15, featuring real-time progress tracking and a beautiful UI.
 
 ## Features
 
