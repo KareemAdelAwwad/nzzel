@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Nazzel Setup Script
-echo "🎥 Setting up Nazzel..."
+# Nzzel Setup Script
+echo "🎥 Setting up Nzzel..."
 
 # Check Node.js
 if ! command -v node &> /dev/null; then

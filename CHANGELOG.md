@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🎉 Initial Release
 
-The first stable release of Nazzel - a modern, full-stack application for downloading YouTube videos and playlists.
+The first stable release of Nzzel - a modern, full-stack application for downloading YouTube videos and playlists.
 
 ### ✨ Features
 
@@ -58,7 +58,7 @@ The first stable release of Nazzel - a modern, full-stack application for downlo
 
 - **Next.js API Routes**: RESTful API endpoints for video extraction and downloads
 - **Socket.IO Server**: WebSocket server for real-time progress updates
-- **yt-dlp Integration**: Robust Nazzel with format selection
+- **yt-dlp Integration**: Robust Nzzel with format selection
 - **ffmpeg Processing**: Video/audio processing and format conversion
 
 #### Database
@@ -122,8 +122,8 @@ The first stable release of Nazzel - a modern, full-stack application for downlo
 
 ```bash
 # Clone repository
-git clone https://github.com/KareemAdelAwwad/nazzel.git
-cd nazzel
+git clone https://github.com/KareemAdelAwwad/nzzel.git
+cd nzzel
 
 # Install dependencies
 npm install

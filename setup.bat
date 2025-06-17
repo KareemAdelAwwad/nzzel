@@ -1,5 +1,5 @@
 @echo off
-echo Setting up Nazzel...
+echo Setting up Nzzel...
 
 REM Check Node.js
 node --version >nul 2>&1

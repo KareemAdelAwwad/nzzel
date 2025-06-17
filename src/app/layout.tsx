@@ -15,7 +15,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Nazzel",
+  title: "Nzzel",
   description: "Modern YouTube video and playlist downloader with real-time progress tracking",
 };
 

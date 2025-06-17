@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-This is a Next.js 15 Nazzel application built with:
+This is a Next.js 15 Nzzel application built with:
 
 - Next.js 15 with App Router and React Server Components
 - TypeScript for type safety

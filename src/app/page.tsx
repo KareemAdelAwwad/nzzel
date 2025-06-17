@@ -18,7 +18,7 @@ export default function Home() {
           <div className="text-center mb-16 space-y-8">
             <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-purple-50 to-primary/10 dark:from-blue-900/30 dark:to-primary/20 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium border border-blue-200/50 dark:border-purple-700/30 backdrop-blur-sm">
               <Zap className="h-4 w-4" />
-              Nazzel
+              Nzzel
             </div>
             <div className="space-y-6">
               <h1 className="text-6xl md:text-7xl font-bold tracking-tight">

@@ -19,9 +19,9 @@ export function Navigation() {
       <div className="container flex h-16 items-center px-4">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2 group">
-            <Image src="/logo.png" alt="Nazzel Icon" width={46} height={46} />
+            <Image src="/logo.png" alt="Nzzel Icon" width={46} height={46} />
             <span className="font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Nazzel
+              Nzzel
             </span>
           </Link>
         </div>
@@ -46,7 +46,7 @@ export function Navigation() {
         </nav>
         <div className="ml-auto flex items-center space-x-4">
           <Link
-            href="https://github.com/KareemAdelAwwad/nazzel"
+            href="https://github.com/KareemAdelAwwad/nzzel"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center h-9 w-9 rounded-lg bg-transparent hover:bg-muted/80 transition-colors"

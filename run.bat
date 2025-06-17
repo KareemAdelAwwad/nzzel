@@ -1,7 +1,7 @@
 @echo off
 color 0A
 echo ========================================
-echo    Nazzel - Startup Script
+echo    Nzzel - Startup Script
 echo ========================================
 echo.
 

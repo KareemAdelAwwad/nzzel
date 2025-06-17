@@ -19,7 +19,7 @@ export function Footer() {
             </a>
           </div>
           <div className="text-sm text-muted-foreground">
-            © {currentYear} Nazzel. All rights reserved.
+            © {currentYear} Nzzel. All rights reserved.
           </div>
         </div>
       </div>
