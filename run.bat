@@ -99,13 +99,13 @@ if %ERRORLEVEL% equ 0 (
 
 :START
 echo [4/4] Starting application...
-echo [INFO] Opening browser in 1 seconds...
+echo [INFO] Opening browser in 3 seconds...
 echo [INFO] Server will start at http://localhost:3000
 
-timeout /t 1 /nobreak >nul
+timeout /t 3 /nobreak >nul
 start "" "http://localhost:3000"
 
 echo [INFO] Starting development server...
 echo [INFO] Press Ctrl+C to stop the server
 echo.
-npm run start
+npm run dev
