@@ -16,7 +16,7 @@ export function Navigation() {
 
   return (
     <header className="sticky-nav">
-      <div className="container flex h-16 items-center px-4">
+      <div className="container flex h-16 items-center px-4 backdrop-blur-md">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2 group">
             <Image src="/logo.png" alt="Nzzel Icon" width={46} height={46} />
