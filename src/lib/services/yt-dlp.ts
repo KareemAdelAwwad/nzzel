@@ -15,29 +15,26 @@ export class YtDlpService extends EventEmitter {
 
   /**
    * Get video information without downloading
-   */  async getVideoInfo(url: string): Promise<VideoInfo> {
-    return new Promise((resolve, reject) => {
+   */
+  async getVideoInfo(url: string): Promise<VideoInfo> {
+    const run = (extraArgs: string[] = []) => new Promise<VideoInfo>((resolve, reject) => {
       const args = [
+        '--ignore-config', // Ensure no user/system config (e.g., format -f) interferes
         '--dump-json',
         '--no-warnings',
         '--no-check-certificate',
+        '--no-playlist',
+        ...extraArgs,
         url
       ];
 
-      const childProcess = spawn('yt-dlp', args, {
-        stdio: ['ignore', 'pipe', 'pipe']
-      });
+      const childProcess = spawn('yt-dlp', args, { stdio: ['ignore', 'pipe', 'pipe'] });
 
       let stdout = '';
       let stderr = '';
 
-      childProcess.stdout?.on('data', (data) => {
-        stdout += data.toString();
-      });
-
-      childProcess.stderr?.on('data', (data) => {
-        stderr += data.toString();
-      });
+      childProcess.stdout?.on('data', (data) => { stdout += data.toString(); });
+      childProcess.stderr?.on('data', (data) => { stderr += data.toString(); });
 
       childProcess.on('close', (code) => {
         if (code === 0) {
@@ -48,21 +45,35 @@ export class YtDlpService extends EventEmitter {
             reject(new Error(`Failed to parse video info: ${error}`));
           }
         } else {
-          reject(new Error(`yt-dlp failed: ${stderr}`));
+          reject(new Error(stderr || `yt-dlp exited with code ${code}`));
         }
       });
 
-      process.on('error', (error) => {
+      childProcess.on('error', (error) => {
         reject(new Error(`Failed to start yt-dlp: ${error.message}`));
       });
     });
+
+    try {
+      return await run();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      // Retry with a safe format fallback if format selection caused failure
+      if (/Requested format is not available|format.*not available/i.test(msg)) {
+        console.log('Retrying with safe format fallback due to format error:', msg);
+        return await run(['-f', 'best']);
+      }
+      throw err; // Re-throw the original error instead of wrapping it
+    }
   }
 
   /**
    * Get playlist information
-   */  async getPlaylistInfo(url: string): Promise<PlaylistInfo> {
+   */
+  async getPlaylistInfo(url: string): Promise<PlaylistInfo> {
     return new Promise((resolve, reject) => {
       const args = [
+        '--ignore-config', // Ensure no user/system config interferes
         '--dump-json',
         '--flat-playlist',
         '--no-warnings',
@@ -70,20 +81,13 @@ export class YtDlpService extends EventEmitter {
         url
       ];
 
-      const childProcess = spawn('yt-dlp', args, {
-        stdio: ['ignore', 'pipe', 'pipe']
-      });
+      const childProcess = spawn('yt-dlp', args, { stdio: ['ignore', 'pipe', 'pipe'] });
 
       let stdout = '';
       let stderr = '';
 
-      childProcess.stdout?.on('data', (data) => {
-        stdout += data.toString();
-      });
-
-      childProcess.stderr?.on('data', (data) => {
-        stderr += data.toString();
-      });
+      childProcess.stdout?.on('data', (data) => { stdout += data.toString(); });
+      childProcess.stderr?.on('data', (data) => { stderr += data.toString(); });
 
       childProcess.on('close', (code) => {
         if (code === 0) {
@@ -110,7 +114,7 @@ export class YtDlpService extends EventEmitter {
         }
       });
 
-      process.on('error', (error) => {
+      childProcess.on('error', (error) => {
         reject(new Error(`Failed to start yt-dlp: ${error.message}`));
       });
     });
@@ -143,18 +147,20 @@ export class YtDlpService extends EventEmitter {
       if (!fs.existsSync(outputPath)) {
         fs.mkdirSync(outputPath, { recursive: true });
       } const args = [
+        '--ignore-config', // Avoid external configs forcing unavailable formats
         '--newline',
         '--no-colors',
         '--output', path.join(outputPath, '%(title)s.%(ext)s'),
       ];
 
-      // Add format selection
+      // Add format selection with fallbacks
       if (options.audioOnly) {
         args.push('-f', 'bestaudio/best');
         args.push('--extract-audio');
         args.push('--audio-format', 'mp3');
       } else if (options.format) {
-        args.push('-f', options.format);
+        // Add fallback to best available format if specific format is not available
+        args.push('-f', `${options.format}/bestvideo+bestaudio/best`);
       } else if (options.quality) {
         switch (options.quality) {
           case 'best':
@@ -164,7 +170,8 @@ export class YtDlpService extends EventEmitter {
             args.push('-f', 'worstvideo+worstaudio/worst');
             break;
           default:
-            args.push('-f', `bestvideo[height<=${options.quality}]+bestaudio/best[height<=${options.quality}]`);
+            // Add fallback to best format if specific quality is not available
+            args.push('-f', `bestvideo[height<=${options.quality}]+bestaudio/best[height<=${options.quality}]/bestvideo+bestaudio/best`);
         }
       } else {
         args.push('-f', 'bestvideo+bestaudio/best');

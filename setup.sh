@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 # Nzzel Setup Script
 echo "🎥 Setting up Nzzel..."
 

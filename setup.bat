@@ -28,6 +28,9 @@ set "PACKAGE_MANAGER=choco"
 
 :check_chocolatey_done
 
+REM Skip over the install_package subroutine
+goto :main
+
 REM Function to install package
 :install_package
 set "package_name=%~1"
@@ -43,6 +46,7 @@ if "%PACKAGE_MANAGER%"=="winget" (
 )
 goto :eof
 
+:main
 REM Check Node.js
 node --version >nul 2>&1
 if %errorlevel% neq 0 (
@@ -120,14 +124,6 @@ echo Setup complete!
 echo.
 echo If any packages failed to install, please restart your terminal and run setup.bat again.
 echo.
-echo To start the development server:
-echo   npm run dev
-echo.
-echo To build for production:
-echo   npm run build
-echo   npm start
-echo.
-echo Happy downloading! 🚀
 echo To start the development server:
 echo   npm run dev
 echo.
