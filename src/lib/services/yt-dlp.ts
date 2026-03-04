@@ -24,6 +24,7 @@ export class YtDlpService extends EventEmitter {
         '--no-warnings',
         '--no-check-certificate',
         '--no-playlist',
+        '--js-runtimes', 'node',
         ...extraArgs,
         url
       ];
@@ -78,6 +79,7 @@ export class YtDlpService extends EventEmitter {
         '--flat-playlist',
         '--no-warnings',
         '--no-check-certificate',
+        '--js-runtimes', 'node',
         url
       ];
 
@@ -150,6 +152,7 @@ export class YtDlpService extends EventEmitter {
         '--ignore-config', // Avoid external configs forcing unavailable formats
         '--newline',
         '--no-colors',
+        '--js-runtimes', 'node',
         '--output', path.join(outputPath, '%(title)s.%(ext)s'),
       ];
 

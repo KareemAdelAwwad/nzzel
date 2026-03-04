@@ -1,5 +1,4 @@
 @echo off
-setlocal enabledelayedexpansion
 color 0A
 echo ========================================
 echo    Nzzel - Startup Script
@@ -48,20 +47,21 @@ for /f %%i in ('git rev-parse HEAD') do set LOCAL_COMMIT=%%i
 for /f %%i in ('git rev-parse origin/%CURRENT_BRANCH%') do set REMOTE_COMMIT=%%i
 
 set CHANGES_DETECTED=0
-if not "%LOCAL_COMMIT%"=="%REMOTE_COMMIT%" (
-    set CHANGES_DETECTED=1
-    echo [INFO] Changes detected in remote repository
-    echo [INFO] Pulling latest changes...
-    git pull origin %CURRENT_BRANCH%
-    if !ERRORLEVEL! neq 0 (
-        echo [ERROR] Failed to pull changes from git
-        echo [WARNING] Continuing with current version...
-        set CHANGES_DETECTED=0
-    ) else (
-        echo [SUCCESS] Successfully pulled latest changes
-    )
-) else (
+if "%LOCAL_COMMIT%"=="%REMOTE_COMMIT%" (
     echo [INFO] No updates available - repository is up to date
+    goto BUILD_CHECK
+)
+
+set CHANGES_DETECTED=1
+echo [INFO] Changes detected in remote repository
+echo [INFO] Pulling latest changes...
+git pull origin %CURRENT_BRANCH%
+if %ERRORLEVEL% neq 0 (
+    echo [ERROR] Failed to pull changes from git
+    echo [WARNING] Continuing with current version...
+    set CHANGES_DETECTED=0
+) else (
+    echo [SUCCESS] Successfully pulled latest changes
 )
 
 :BUILD_CHECK
