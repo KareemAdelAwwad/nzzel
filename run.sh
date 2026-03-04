@@ -64,6 +64,7 @@ fi
 echo
 echo -e "${BLUE}[2/4] Checking build status...${NC}"
 
+SKIP_BUILD=false
 if [ -d ".next" ]; then
     if [ $CHANGES_DETECTED -eq 1 ]; then
         echo -e "${YELLOW}[INFO] Changes detected - rebuilding application...${NC}"
@@ -71,33 +72,13 @@ if [ -d ".next" ]; then
         rm -rf ".next" >/dev/null 2>&1
     else
         echo -e "${YELLOW}[INFO] No changes detected - using existing build${NC}"
-        # Skip to start section
-        echo
-        echo -e "${BLUE}[4/4] Starting application...${NC}"
-        echo -e "${YELLOW}[INFO] Opening browser in 3 seconds...${NC}"
-        echo -e "${YELLOW}[INFO] Server will start at http://localhost:3000${NC}"
-        
-        sleep 3
-        
-        # Try to open browser (different commands for different systems)
-        if command -v xdg-open > /dev/null; then
-            xdg-open "http://localhost:3000" >/dev/null 2>&1 &
-        elif command -v open > /dev/null; then
-            open "http://localhost:3000" >/dev/null 2>&1 &
-        elif command -v sensible-browser > /dev/null; then
-            sensible-browser "http://localhost:3000" >/dev/null 2>&1 &
-        fi
-        
-        echo -e "${YELLOW}[INFO] Starting development server...${NC}"
-        echo -e "${YELLOW}[INFO] Press Ctrl+C to stop the server${NC}"
-        echo
-        npm run dev
-        exit 0
+        SKIP_BUILD=true
     fi
 else
     echo -e "${YELLOW}[INFO] No previous build found${NC}"
 fi
 
+if [ "$SKIP_BUILD" != "true" ]; then
 echo -e "${BLUE}[3/4] Building application...${NC}"
 npm run build
 
@@ -108,6 +89,9 @@ else
     echo -e "${RED}[ERROR] Please check the output above for details${NC}"
     read -p "Press any key to continue..."
     exit 1
+fi
+else
+    echo -e "${YELLOW}[INFO] Skipping build step${NC}"
 fi
 
 echo
@@ -126,7 +110,7 @@ elif command -v sensible-browser > /dev/null; then
     sensible-browser "http://localhost:3000" >/dev/null 2>&1 &
 fi
 
-echo -e "${YELLOW}[INFO] Starting development server...${NC}"
+echo -e "${YELLOW}[INFO] Starting server...${NC}"
 echo -e "${YELLOW}[INFO] Press Ctrl+C to stop the server${NC}"
 echo
-npm run dev
+npm run start

@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 color 0A
 echo ========================================
 echo    Nzzel - Startup Script
@@ -52,7 +53,7 @@ if not "%LOCAL_COMMIT%"=="%REMOTE_COMMIT%" (
     echo [INFO] Changes detected in remote repository
     echo [INFO] Pulling latest changes...
     git pull origin %CURRENT_BRANCH%
-    if %ERRORLEVEL% neq 0 (
+    if !ERRORLEVEL! neq 0 (
         echo [ERROR] Failed to pull changes from git
         echo [WARNING] Continuing with current version...
         set CHANGES_DETECTED=0
@@ -105,7 +106,7 @@ echo [INFO] Server will start at http://localhost:3000
 timeout /t 1 /nobreak >nul
 start "" "http://localhost:3000"
 
-echo [INFO] Starting development server...
+echo [INFO] Starting server...
 echo [INFO] Press Ctrl+C to stop the server
 echo.
 npm run start
